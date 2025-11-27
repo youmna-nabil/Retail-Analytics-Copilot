@@ -1,0 +1,2 @@
+{"id": "rag_policy_beverages_return_days", "final_answer": 3, "sql": "", "confidence": 0.74, "explanation": "Extracted from document context", "citations": ["product_policy::chunk0", "catalog::chunk0", "marketing_calendar::chunk0"]}
+{"id": "hybrid_top_category_qty_summer_1997", "final_answer": {}, "sql": "SELECT COUNT(*) FROM Orders;", "confidence": 0.85, "explanation": "Extracted from query results", "citations": ["marketing_calendar::chunk0", "catalog::chunk0", "kpi_definitions::chunk0"]}
