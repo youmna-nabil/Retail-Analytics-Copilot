@@ -5,7 +5,7 @@ class Config:
         self.BatchFile = r"sample_questions_hybrid_eval.jsonl"
         self.OutputFile = r"outputs_hybrid.jsonl"
 
-        self.BASE_URL = r"http://127.0.0.1:11434"
+        self.BASE_URL = "http://127.0.0.1:11435"
       
 
 

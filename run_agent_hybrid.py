@@ -20,9 +20,6 @@ def main():
     batch_file = config.BatchFile
     output_file = config.OutputFile
     
-    print(f"Input: {batch_file}")
-    print(f"Output: {output_file}")
-    
     # Setup DSPy
     setup_dspy()
     
@@ -52,7 +49,7 @@ def main():
         except json.JSONDecodeError:
             break  # Stop if no more valid JSON
     
-    print(f"\n[INFO] Loaded {len(questions)} questions\n")
+    print(f"\n Loaded {len(questions)} questions\n")
     
     # Process each question
     results = []
@@ -62,12 +59,8 @@ def main():
         question_text = q["question"]
         format_hint = q.get("format_hint", "str")
         
-        print(f"\n{'=' * 70}")
-        print(f"[{idx+1}/{len(questions)}] Processing: {question_id}")
-        print(f"{'=' * 70}")
-        print(f"Q: {question_text}")
-        print(f"Format: {format_hint}")
-        
+        print(f" Processing: {question_id}")
+
         try:
             # Run agent
             result = agent.run(question_text, format_hint)
@@ -83,9 +76,7 @@ def main():
             }
             
             print(f"\n[SUCCESS] Answer: {result['final_answer']}")
-            print(f"Confidence: {result['confidence']:.2f}")
-            print(f"Citations: {', '.join(result['citations'][:5])}{'...' if len(result['citations']) > 5 else ''}")
-            
+
         except Exception as e:
             print(f"\n[ERROR] {str(e)}")
             output = {
@@ -99,16 +90,11 @@ def main():
         
         results.append(output)
     
-    # Write results
-    print(f"\n{'=' * 70}")
-    print(f"Writing results to {output_file}...")
-    print(f"{'=' * 70}")
-    
+    # Write results to output file    
     with open(output_file, 'w') as f:
         for result in results:
             f.write(json.dumps(result) + '\n')
     
-    print(f"\n✓ Done! Results written to {output_file}")
     print(f"Processed {len(results)} questions")
     
     # Cleanup
