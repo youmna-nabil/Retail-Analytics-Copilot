@@ -10,7 +10,7 @@ from assets.config import config
 
 
 def setup_dspy():
-    lm = dspy.LM(model=f"ollama_chat/{settings.MODEL}", api_base=config.BASE_URL, max_tokens=settings.MaxTokens,  temperature=settings.Temperature)
+    lm = dspy.LM(model=f"ollama/{settings.MODEL}", api_base=config.BASE_URL, max_tokens=settings.MaxTokens,  temperature=settings.Temperature)
     dspy.settings.configure(lm=lm)
 
 
@@ -31,23 +31,18 @@ def main():
     # Create agent
     agent = HybridRetailAgent(router, nl_to_sql, synthesizer)
     
-    # Load questions
-    with open(batch_file, 'r') as f:
-        content = f.read()
-    
-    decoder = json.JSONDecoder()
-    pos = 0
     questions = []
-    while pos < len(content):
-        if content[pos].isspace():
-            pos += 1
-            continue
-        try:
-            obj, end = decoder.raw_decode(content, pos)
-            questions.append(obj)
-            pos += end
-        except json.JSONDecodeError:
-            break  # Stop if no more valid JSON
+    with open(batch_file, 'r', encoding='utf-8') as f:
+        for line_num, line in enumerate(f, 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+                questions.append(obj)
+            except json.JSONDecodeError as e:
+                print(f"Warning: Could not parse line {line_num}: {e}")
+                continue
     
     print(f"\n Loaded {len(questions)} questions\n")
     
